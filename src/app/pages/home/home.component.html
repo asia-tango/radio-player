@@ -1,59 +1,73 @@
 <div class="home">
-  <app-radio-player />
+  <div class="home__left">
+    <div class="home__player">
+      <app-radio-player />
+    </div>
 
-  <div class="country-row">
-    <label class="country-row__label" for="country-select">Country</label>
-    <select
-      id="country-select"
-      class="filter-select"
-      [value]="effectiveCountryCode()"
-      (change)="onCountryChange($any($event.target).value)"
-    >
-      @for (c of countries; track c.code) {
-        <option [value]="c.code">{{ c.name }}</option>
-      }
-    </select>
-
-    <button type="button" mat-stroked-button class="filter-btn" (click)="toggleFavoritesOnly()">
-      {{ showFavoritesOnly() ? 'Show all' : 'Show favorites' }}
-    </button>
-  </div>
-
-  <div class="tag-chips">
-    @for (t of tags; track t) {
-      <button
-        type="button"
-        class="tag-chip"
-        [class.tag-chip--active]="tag() === t"
-        (click)="toggleTag(t)"
+    <div class="country-row">
+      <label class="country-row__label" for="country-select">Country</label>
+      <select
+        id="country-select"
+        class="filter-select"
+        [value]="effectiveCountryCode()"
+        (change)="onCountryChange($any($event.target).value)"
       >
-        {{ t }}
+        @for (c of countries; track c.code) {
+          <option [value]="c.code">{{ c.name }}</option>
+        }
+      </select>
+
+      <button type="button" mat-stroked-button class="filter-btn" (click)="toggleFavoritesOnly()">
+        {{ showFavoritesOnly() ? 'Show all' : 'Show favorites' }}
       </button>
-    }
+    </div>
+
+    <div class="tag-chips">
+      @for (t of tags; track t) {
+        <button
+          type="button"
+          class="tag-chip"
+          [class.tag-chip--active]="tag() === t"
+          (click)="toggleTag(t)"
+        >
+          {{ t }}
+        </button>
+      }
+    </div>
   </div>
 
-  <div class="filter-field">
-    <mat-icon>search</mat-icon>
-    <input
-      type="text"
-      placeholder="Search stations by name…"
-      [value]="q()"
-      (input)="onSearchInput($any($event.target).value)"
-    />
-  </div>
+  <div class="home__browser">
+    <div class="filter-field">
+      <mat-icon>search</mat-icon>
+      <input
+        type="text"
+        placeholder="Find the station name"
+        [value]="q()"
+        (input)="onSearchInput($any($event.target).value)"
+      />
+    </div>
 
-  @if (showFavoritesOnly()) {
-    <app-station-list
-      [stations]="favorites.favorites()"
-      emptyMessage="No favorites yet — add some from the search results."
-    />
-  } @else {
-    @defer (when stationService.hasSearched()) {
-      <app-station-list />
-    } @placeholder {
-      <p class="hint">Pick a country to see stations.</p>
-    } @loading {
-      <p class="hint">Loading…</p>
+    @if (!showFavoritesOnly() && stationService.fellBackFromCountry()) {
+      <p class="hint hint--fallback">
+        No {{ tag() }} stations in {{ effectiveCountryName() }} — showing worldwide
+      </p>
     }
-  }
+
+    <div class="home__list">
+      @if (showFavoritesOnly()) {
+        <app-station-list
+          [stations]="favorites.favorites()"
+          emptyMessage="No favorites yet — add some from the search results."
+        />
+      } @else {
+        @defer (when stationService.hasSearched()) {
+          <app-station-list />
+        } @placeholder {
+          <p class="hint">Pick a country to see stations.</p>
+        } @loading {
+          <p class="hint">Loading…</p>
+        }
+      }
+    </div>
+  </div>
 </div>

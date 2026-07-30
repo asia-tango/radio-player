@@ -1,47 +1,26 @@
 <div class="help">
   <h1 class="help__title">How to use RedWave FM</h1>
 
-  <section class="help__section">
-    <h2>Instant random play</h2>
-    <p>
-      Press the "Random" button next to play/pause at any time to jump straight into a random
-      station from the current top 100 by popularity — no setup needed.
-    </p>
-  </section>
+  <div class="help__search">
+    <mat-icon>search</mat-icon>
+    <input
+      type="text"
+      placeholder="Find a topic"
+      [value]="query()"
+      (input)="onQueryInput($any($event.target).value)"
+    />
+  </div>
 
-  <section class="help__section">
-    <h2>Pick a country</h2>
-    <p>
-      Use the country dropdown to load stations broadcasting from that country, sorted by
-      popularity. We default to a country based on your browser's language.
-    </p>
-  </section>
-
-  <section class="help__section">
-    <h2>Filter by genre</h2>
-    <p>Tap one of the genre chips (jazz, rock, chill, and more) to narrow the list. Tap it again to clear it.</p>
-  </section>
-
-  <section class="help__section">
-    <h2>Search by name</h2>
-    <p>Type part of a station's name in the search box to further narrow the current list.</p>
-  </section>
-
-  <section class="help__section">
-    <h2>Favorites</h2>
-    <p>
-      Tap the heart icon on any station to add or remove it from your favorites. Favorites are saved
-      in your browser and stay there after you refresh the page. Press "Show favorites" to see only
-      your saved stations.
-    </p>
-  </section>
-
-  <section class="help__section">
-    <h2>Playback</h2>
-    <p>
-      Click a station in the list to start streaming it, then use the round play/pause button to
-      control playback. RedWave FM streams live radio, so there's no seeking or track list — if a
-      station doesn't respond, you'll see a short error message; just pick another one.
-    </p>
-  </section>
+  @if (sections().length === 0) {
+    <p class="help__empty">No topics match your search.</p>
+  } @else {
+    <div class="help__grid">
+      @for (section of sections(); track section.title) {
+        <section class="help__section">
+          <h2>{{ section.title }}</h2>
+          <p>{{ section.body }}</p>
+        </section>
+      }
+    </div>
+  }
 </div>

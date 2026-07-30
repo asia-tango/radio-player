@@ -32,7 +32,9 @@ export class HomeComponent {
   protected readonly stationService = inject(StationService);
   protected readonly favorites = inject(FavoritesService);
 
-  readonly q = input('', { alias: 'q' });
+  // Router query-param binding can pass `undefined` for an absent param even though
+  // the input type says `string` — coerce it here instead of trusting that guarantee.
+  readonly q = input('', { alias: 'q', transform: (value: string) => value ?? '' });
   readonly tag = input<string | null>(null);
   readonly country = input<string | null>(null);
 
@@ -42,6 +44,9 @@ export class HomeComponent {
 
   private readonly defaultCountryCode = detectDefaultCountryCode();
   protected readonly effectiveCountryCode = computed(() => this.country() ?? this.defaultCountryCode);
+  protected readonly effectiveCountryName = computed(
+    () => this.countries.find((c) => c.code === this.effectiveCountryCode())?.name ?? this.effectiveCountryCode(),
+  );
 
   constructor() {
     effect(() => this.stationService.setSearchQuery(this.q()));

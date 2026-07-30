@@ -1,9 +1,66 @@
+:host {
+  display: block;
+}
+
 .home {
   display: flex;
+  // nowrap on purpose: flexbox's default wrap-when-preferred-size-overflows
+  // kicked in well before the 900px breakpoint below actually needed it,
+  // silently stacking the columns on plenty of normal desktop widths.
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 90px 20px 0;
+}
+
+.home__left {
+  flex: 0 1 600px;
+  display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 20px;
-  padding: 90px 20px 60px;
+}
+
+.home__browser {
+  flex: 1 1 420px;
+  min-width: 320px;
+  max-width: 600px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.home__list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+
+  // Visible, minimal scrollbar in the same white/red language as the rest of the UI.
+  scrollbar-width: thin;
+  scrollbar-color: #fff rgba(255, 255, 255, 0.15);
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #fff;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #ffe8e0;
+  }
 }
 
 .country-row {
@@ -13,7 +70,6 @@
   justify-content: center;
   gap: 12px;
   width: 100%;
-  max-width: 600px;
 
   &__label {
     color: rgba(255, 255, 255, 0.9);
@@ -28,7 +84,6 @@
   justify-content: center;
   gap: 8px;
   width: 100%;
-  max-width: 600px;
 }
 
 .tag-chip {
@@ -62,7 +117,6 @@
   border-radius: 50px;
   padding: 8px 16px;
   width: 100%;
-  max-width: 600px;
 
   mat-icon {
     color: #6b6b6b;
@@ -86,10 +140,16 @@
 }
 
 .filter-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   border: none;
   border-radius: 50px;
-  padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.92);
+  padding: 8px 40px 8px 16px;
+  background-color: rgba(255, 255, 255, 0.92);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%232c2c2c' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
   color: #2c2c2c;
   font-size: 14px;
   cursor: pointer;
@@ -98,4 +158,23 @@
 .hint {
   color: rgba(255, 255, 255, 0.85);
   text-align: center;
+}
+
+.hint--fallback {
+  font-size: 13px;
+  font-style: italic;
+  margin: 0;
+}
+
+// Side-by-side layout only makes sense with room to spare; below that, stack
+// the two blocks. The station list still keeps its own fixed-height scroll.
+@media (max-width: 900px) {
+  .home {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .home__browser {
+    max-width: 600px;
+  }
 }

@@ -65,12 +65,31 @@ export class PlayerService {
     }
   }
 
+  /**
+   * Backs the main play/pause button, which is always clickable: if nothing is
+   * loaded yet, start the first station of the current filtered list (country/
+   * genre/search already applied by StationService) instead of just toggling.
+   */
+  playOrToggle(): void {
+    if (this.currentStation()) {
+      this.togglePlayPause();
+      return;
+    }
+    const station = this.stationService.stations()[0];
+    if (station) {
+      this.play(station);
+    }
+  }
+
   playRandomTop(): void {
-    this.stationService.fetchRandomTopStation().subscribe((station) => {
-      if (station) {
-        this.play(station);
-      }
-    });
+    // Picked synchronously from an already-loaded list (see StationService.topStations)
+    // so play() runs inside this click's user gesture — fetching over the network
+    // first would delay play() past the gesture window and get silently blocked
+    // by the browser's autoplay policy.
+    const station = this.stationService.pickRandomTopStation();
+    if (station) {
+      this.play(station);
+    }
   }
 
   stop(): void {

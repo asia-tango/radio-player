@@ -1,20 +1,41 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { httpResource } from '@angular/common/http';
-import { Injectable, computed, inject, signal } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Injectable, computed, effect, inject, resource, signal } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { firstValueFrom } from 'rxjs';
 
+import { excludeBannedStations } from '../data/content-policy';
+import { dedupeStations } from '../data/dedupe-stations';
 import { RADIO_BROWSER_API_BASE } from '../data/radio-browser.config';
 import { Station } from '../models/station.model';
+
+interface SearchParams {
+  query: string;
+  tag: string | null;
+  countryCode: string | null;
+}
+
+interface SearchResult {
+  stations: Station[];
+  fellBackFromCountry: boolean;
+}
+
+// Fetches extra headroom above the 100 we actually want, since banned-country
+// stations are filtered out afterwards (see content-policy.ts).
+const TOP_STATIONS_URL = `${RADIO_BROWSER_API_BASE}/json/stations/search?${new HttpParams({
+  fromObject: { limit: '200', hidebroken: 'true', order: 'votes', reverse: 'true' },
+}).toString()}`;
 
 @Injectable({ providedIn: 'root' })
 export class StationService {
   private readonly http = inject(HttpClient);
+  private readonly snackBar = inject(MatSnackBar);
 
   readonly searchQuery = signal('');
   readonly selectedTag = signal<string | null>(null);
   readonly selectedCountryCode = signal<string | null>(null);
 
-  private readonly searchUrl = computed(() => {
+  private readonly searchParams = computed<SearchParams | undefined>(() => {
     const query = this.searchQuery().trim();
     const tag = this.selectedTag();
     const countryCode = this.selectedCountryCode();
@@ -23,29 +44,52 @@ export class StationService {
       return undefined;
     }
 
-    const params = new HttpParams({
-      fromObject: {
-        limit: '30',
-        hidebroken: 'true',
-        order: 'votes',
-        reverse: 'true',
-        ...(query ? { name: query } : {}),
-        ...(tag ? { tag } : {}),
-        ...(countryCode ? { countrycode: countryCode } : {}),
-      },
-    });
-
-    return `${RADIO_BROWSER_API_BASE}/json/stations/search?${params.toString()}`;
+    return { query, tag, countryCode };
   });
 
-  private readonly stationsResource = httpResource<Station[]>(() => this.searchUrl(), {
+  // Uses the generic `resource()` (not httpResource) because a plain declarative
+  // URL isn't enough here: a country+genre combo that comes back empty needs a
+  // second, worldwide-by-genre request as a fallback.
+  private readonly searchResource = resource({
+    params: () => this.searchParams(),
+    loader: async ({ params }) => {
+      const primary = await this.fetchStations(params.query, params.tag, params.countryCode);
+      if (primary.length === 0 && params.tag && params.countryCode) {
+        const fallback = await this.fetchStations(params.query, params.tag, null);
+        return { stations: fallback, fellBackFromCountry: fallback.length > 0 };
+      }
+      return { stations: primary, fellBackFromCountry: false };
+    },
+    defaultValue: { stations: [], fellBackFromCountry: false } as SearchResult,
+  });
+
+  readonly stations = computed(() => this.searchResource.value().stations);
+  readonly fellBackFromCountry = computed(() => this.searchResource.value().fellBackFromCountry);
+  readonly isLoading = this.searchResource.isLoading;
+  readonly error = this.searchResource.error;
+  readonly hasSearched = computed(() => this.searchParams() !== undefined);
+
+  // Loaded once at startup (constant URL) and reused by the "Random" button, so
+  // clicking it can call audio.play() synchronously within the click's user
+  // gesture instead of blocking on a network round-trip first.
+  private readonly topStationsResource = httpResource<Station[]>(() => TOP_STATIONS_URL, {
     defaultValue: [],
+    parse: (raw) => dedupeStations(excludeBannedStations(raw as Station[])).slice(0, 100),
   });
 
-  readonly stations = this.stationsResource.value;
-  readonly isLoading = this.stationsResource.isLoading;
-  readonly error = this.stationsResource.error;
-  readonly hasSearched = computed(() => this.searchUrl() !== undefined);
+  readonly topStations = this.topStationsResource.value;
+
+  constructor() {
+    effect(() => {
+      if (this.searchResource.error()) {
+        this.snackBar.open(
+          "Sorry — the station directory isn't responding. Try Random instead.",
+          undefined,
+          { duration: 4000 },
+        );
+      }
+    });
+  }
 
   setSearchQuery(query: string): void {
     this.searchQuery.set(query);
@@ -65,19 +109,29 @@ export class StationService {
     this.selectedCountryCode.set(null);
   }
 
-  /** One-off pick of a random station from the top 100 by votes, for the "Random" button. */
-  fetchRandomTopStation(): Observable<Station | undefined> {
+  pickRandomTopStation(): Station | undefined {
+    const stations = this.topStations();
+    return stations.length ? stations[Math.floor(Math.random() * stations.length)] : undefined;
+  }
+
+  private async fetchStations(
+    query: string,
+    tag: string | null,
+    countryCode: string | null,
+  ): Promise<Station[]> {
     const params = new HttpParams({
       fromObject: {
-        limit: '100',
+        limit: '30',
         hidebroken: 'true',
         order: 'votes',
         reverse: 'true',
+        ...(query ? { name: query } : {}),
+        ...(tag ? { tag } : {}),
+        ...(countryCode ? { countrycode: countryCode } : {}),
       },
     });
-
-    return this.http
-      .get<Station[]>(`${RADIO_BROWSER_API_BASE}/json/stations/search?${params.toString()}`)
-      .pipe(map((stations) => stations[Math.floor(Math.random() * stations.length)]));
+    const url = `${RADIO_BROWSER_API_BASE}/json/stations/search?${params.toString()}`;
+    const raw = await firstValueFrom(this.http.get<Station[]>(url));
+    return dedupeStations(excludeBannedStations(raw));
   }
 }

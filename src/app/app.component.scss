@@ -1,0 +1,66 @@
+:host {
+  display: block;
+}
+
+// Single centering container for whatever page renders in the router-outlet,
+// so page content stays centered with even side margins on wide viewports.
+// The fixed top-left nav bar is intentionally outside this — it's pinned to
+// the viewport corner by design, not part of the centered content column.
+.page-container {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.site-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 45px 20px 0;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__made-by {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #fff;
+      transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+
+      &:hover {
+        background: #fff;
+        color: #c0392b;
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  &__copyright {
+    margin: 0;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+}

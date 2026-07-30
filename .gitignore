@@ -48,3 +48,7 @@ Thumbs.db
 
 # Copyrighted audio files kept only for local reference, not for the public repo
 /reference/old-src/assets/audio/
+
+# Firebase CLI local cache/logs
+/.firebase/
+firebase-debug.log
