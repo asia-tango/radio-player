@@ -1,59 +1,44 @@
-# RadioPlayer
+# RedWave FM
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.19.
+A live internet radio player built with Angular 21 (standalone components, signals, zoneless-free
+`OnPush` everywhere, no NgModules) as a portfolio piece for a Senior/Lead Angular job search.
+
+**Live demo:** https://redwave-fm.web.app
+
+Streams real stations from the [Radio Browser API](https://api.radio-browser.info) — browse by
+country, filter by genre, search by name, save favorites, or just hit Random for an instant pick
+from the current top 100 by popularity.
+
+## Stack
+
+- Angular 21 — standalone components, signals, `httpResource`/`resource`, native control flow
+- Angular Material — scoped to buttons, icons, and snackbars only; everything else is hand-rolled SCSS
+- Firebase Hosting
 
 ## Development server
 
-To start a local development server, run:
-
 ```bash
-ng serve
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
+Open `http://localhost:4200/`. The app reloads automatically as you edit source files.
 
 ## Building
 
-To build the project run:
-
 ```bash
-ng build
+npm run build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Production output goes to `dist/radio-player/browser`.
 
 ## Running unit tests
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
 ```bash
-ng test
+npm test
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+## Deploying
 
 ```bash
-ng e2e
+firebase deploy --only hosting
 ```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
