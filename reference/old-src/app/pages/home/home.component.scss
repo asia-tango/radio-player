@@ -1,0 +1,28 @@
+.main-wrap{
+  min-height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.mood-picker{
+  position: static;
+  pointer-events: auto !important;
+}
+
+.mood-picker .inner-wrap{
+  pointer-events: auto;
+}
+
+.mood-btn.mat-mdc-outlined-button {
+  background: transparent !important;
+  border-color: rgba(255,255,255,.7);
+  color: #fff;
+}
+
+.player.player-full{
+  min-height: auto;
+  display: block;
+}

@@ -1,0 +1,30 @@
+.nav-wrap {
+  height: 50px;
+  padding-left: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  
+
+  a {
+    display: inline-block;
+    color: rgb(96, 14, 14);
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+    transition: color .25s ease, transform .25s ease;
+    transform-origin: left center;
+  }
+
+  a:hover {
+    color: rgb(136, 22, 22);
+    transform: scale(1.08);
+  }
+
+  a.active {
+    border-bottom: 3px solid rgb(96, 14, 14);
+  }
+}

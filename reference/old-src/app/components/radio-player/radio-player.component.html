@@ -1,0 +1,17 @@
+<div class="radio-player">
+  <div class="radio-header">
+    <h1 class="radio-title">RedWave FM</h1>
+    <p class="radio-subtitle">Your music, your wave!</p>
+  </div>
+
+  <div class="radio-controls">
+    <button class="play-pause-btn" (click)="playPause()">
+      {{ isPlaying.value ? '⏸' : '▶' }}
+    </button>
+  </div>
+
+  <div class="now-playing" *ngIf="isPlaying.value">
+    <p class="current-info">Now playing:</p>
+    <p class="current-track">{{ currentTrack.title }}</p>
+  </div>
+</div>

@@ -1,0 +1,66 @@
+.status-message {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 16px;
+  padding: 20px;
+}
+
+.station-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.station-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 14px;
+  padding: 6px 8px 6px 18px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
+  }
+
+  &--active {
+    outline: 2px solid #db1717;
+  }
+
+  button.station-row__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 0;
+    text-align: left;
+  }
+
+  .station-row__name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c2c2c;
+  }
+
+  .station-row__meta {
+    font-size: 13px;
+    color: #6b6b6b;
+    text-transform: capitalize;
+  }
+
+  button[mat-icon-button] {
+    color: #db1717;
+  }
+}

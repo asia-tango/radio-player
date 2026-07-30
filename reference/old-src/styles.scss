@@ -1,0 +1,89 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  // background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #667eea, #764ba2);
+  background: linear-gradient(-45deg, #ff6b35, #f7931e, #e74c3c, #c0392b, #8e44ad, #2c3e50);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+  // min-height: 100vh;
+  // padding: 20px;
+  overflow-x: hidden;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+app-root {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.cdk-overlay-container { z-index: 10000; }
+.cdk-global-overlay-wrapper { display: flex !important; align-items: center !important; justify-content: center !important; }
+
+.playlist-backdrop {
+  background: rgba(20, 8, 6, 0.55) !important;
+  backdrop-filter: blur(6px) saturate(120%);
+}
+
+.playlist-dialog .mat-mdc-dialog-container {
+  padding: 0 !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+  background: #fff !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28) !important;
+}
+
+.playlist-dialog .mat-mdc-dialog-surface {
+  padding: 20px 22px 18px !important;
+  border-radius: 16px !important;
+  background: #fff !important;
+}
+
+.mood-btn.mat-mdc-outlined-button {
+  background: transparent !important;
+  border-color: rgba(255,255,255,.7);
+  color: #fff;
+}
+.mood-btn.mat-mdc-outlined-button:hover {
+  background: rgba(255,255,255,.12);
+}
+
+.mood-btn .mdc-button__label {
+  display: inline-block;
+  transform-origin: center;
+  animation: moodPulse 1.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes moodPulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}

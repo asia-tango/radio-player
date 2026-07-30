@@ -1,0 +1,21 @@
+@if (isLoading()) {
+  <p class="status-message">Loading stations…</p>
+} @else if (displayedStations().length === 0) {
+  <p class="status-message">{{ emptyMessage() }}</p>
+} @else {
+  <ul class="station-list">
+    @for (station of displayedStations(); track station.stationuuid) {
+      @let isCurrent = player.currentStation()?.stationuuid === station.stationuuid;
+      @let isFavorite = favorites.isFavorite(station.stationuuid);
+      <li class="station-row" [class.station-row--active]="isCurrent">
+        <button type="button" class="station-row__main" (click)="player.play(station)">
+          <span class="station-row__name">{{ station.name }}</span>
+          <span class="station-row__meta">{{ station.country || 'Unknown country' }} · {{ station.tags || 'no tags' }}</span>
+        </button>
+        <button mat-icon-button type="button" (click)="favorites.toggle(station)" aria-label="Toggle favorite">
+          <mat-icon>{{ isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
+        </button>
+      </li>
+    }
+  </ul>
+}

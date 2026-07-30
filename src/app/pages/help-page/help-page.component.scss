@@ -1,0 +1,33 @@
+.help {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 90px 24px 60px;
+  color: #fff;
+}
+
+.help__title {
+  font-size: 32px;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin: 0 0 24px;
+}
+
+.help__section {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 18px 22px;
+  backdrop-filter: blur(10px);
+  margin-bottom: 16px;
+
+  h2 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+  }
+}

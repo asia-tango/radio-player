@@ -1,0 +1,31 @@
+<div class="picker">
+  <header class="picker__header">
+    <h2 class="picker__title">Choose your mood</h2>
+    <p class="picker__subtitle">Pick a playlist, then press play on the player.</p>
+  </header>
+
+  <mat-dialog-content class="picker__content">
+    <div class="mood-list" role="list">
+      <button
+        type="button"
+        class="mood-card"
+        role="listitem"
+        *ngFor="let pid of data.playlistIds"
+        [class.mood-card--selected]="isSelected(pid)"
+        (click)="choosePlaylist(pid)"
+      >
+        <span class="mood-card__title">{{ getMood(pid).title }}</span>
+        <span class="mood-card__subtitle" *ngIf="getMood(pid).subtitle as sub">{{ sub }}</span>
+      </button>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="picker__actions" align="end">
+    <button type="button" mat-stroked-button class="picker__btn-random" (click)="randomPlaylist()">
+      Random mood
+    </button>
+    <button type="button" mat-flat-button color="primary" class="picker__btn-close" mat-dialog-close>
+      Close
+    </button>
+  </mat-dialog-actions>
+</div>

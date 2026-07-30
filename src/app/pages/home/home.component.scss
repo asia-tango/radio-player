@@ -1,0 +1,63 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding: 90px 20px 60px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.filter-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 50px;
+  padding: 8px 16px;
+  flex: 1;
+  min-width: 200px;
+
+  mat-icon {
+    color: #6b6b6b;
+  }
+
+  input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    flex: 1;
+    color: #2c2c2c;
+  }
+}
+
+.filter-btn {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.7) !important;
+  color: #fff !important;
+  white-space: nowrap;
+}
+
+.filter-select {
+  border: none;
+  border-radius: 50px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #2c2c2c;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.hint {
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+}

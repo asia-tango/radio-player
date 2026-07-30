@@ -1,0 +1,164 @@
+.radio-player {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 60px 50px;
+  background: linear-gradient(135deg, #480101 0%, #db1717 100%);
+  border-radius: 25px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  color: white;
+  text-align: center;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
+}
+
+.radio-header {
+  .radio-title {
+    margin: 0 0 15px 0;
+    font-size: 42px;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .radio-subtitle {
+    margin: 0;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 300;
+  }
+}
+
+.radio-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .play-pause-btn {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    border: none;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      font-size: 42px;
+      width: 42px;
+      height: 42px;
+    }
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, #ff5252, #ffb300);
+      transform: scale(1.1);
+      box-shadow: 0 12px 35px rgba(255, 107, 107, 0.6);
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.95);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.now-playing {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px 25px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  .current-info {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    font-style: italic;
+  }
+
+  .current-track {
+    margin: 10px 0;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: left;
+  }
+
+  button {
+    color: white;
+    flex-shrink: 0;
+  }
+
+  &--empty {
+    justify-content: center;
+
+    .current-info {
+      font-style: normal;
+    }
+  }
+}
+
+.player-error {
+  color: #ffd6d6;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .radio-player {
+    margin: 20px;
+    padding: 40px 30px;
+    max-width: none;
+    min-height: 400px;
+  }
+
+  .radio-header .radio-title {
+    font-size: 32px;
+  }
+
+  .radio-controls .play-pause-btn {
+    width: 100px;
+    height: 100px;
+
+    mat-icon {
+      font-size: 36px;
+      width: 36px;
+      height: 36px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .radio-player {
+    margin: 20px;
+    padding: 30px 20px;
+    max-width: none;
+  }
+
+  .radio-header .radio-title {
+    font-size: 24px;
+  }
+
+  .radio-controls .play-pause-btn {
+    width: 80px;
+    height: 80px;
+
+    mat-icon {
+      font-size: 30px;
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
