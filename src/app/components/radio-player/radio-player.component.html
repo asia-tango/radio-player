@@ -19,6 +19,11 @@
         <mat-icon>play_arrow</mat-icon>
       }
     </button>
+
+    <button type="button" mat-stroked-button class="random-btn" (click)="player.playRandomTop()">
+      <mat-icon>shuffle</mat-icon>
+      Random
+    </button>
   </div>
 
   @if (player.currentStation(); as station) {
@@ -31,7 +36,7 @@
     </div>
   } @else {
     <div class="now-playing now-playing--empty">
-      <p class="current-info">Search for a station or pick a tag to start listening.</p>
+      <p class="current-info">Press Random for an instant station, or pick a country below.</p>
     </div>
   }
 

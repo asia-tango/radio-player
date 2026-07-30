@@ -1,12 +1,15 @@
-import { HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { httpResource } from '@angular/common/http';
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { Observable, map } from 'rxjs';
 
 import { RADIO_BROWSER_API_BASE } from '../data/radio-browser.config';
 import { Station } from '../models/station.model';
 
 @Injectable({ providedIn: 'root' })
 export class StationService {
+  private readonly http = inject(HttpClient);
+
   readonly searchQuery = signal('');
   readonly selectedTag = signal<string | null>(null);
   readonly selectedCountryCode = signal<string | null>(null);
@@ -24,7 +27,7 @@ export class StationService {
       fromObject: {
         limit: '30',
         hidebroken: 'true',
-        order: 'clickcount',
+        order: 'votes',
         reverse: 'true',
         ...(query ? { name: query } : {}),
         ...(tag ? { tag } : {}),
@@ -60,5 +63,21 @@ export class StationService {
     this.searchQuery.set('');
     this.selectedTag.set(null);
     this.selectedCountryCode.set(null);
+  }
+
+  /** One-off pick of a random station from the top 100 by votes, for the "Random" button. */
+  fetchRandomTopStation(): Observable<Station | undefined> {
+    const params = new HttpParams({
+      fromObject: {
+        limit: '100',
+        hidebroken: 'true',
+        order: 'votes',
+        reverse: 'true',
+      },
+    });
+
+    return this.http
+      .get<Station[]>(`${RADIO_BROWSER_API_BASE}/json/stations/search?${params.toString()}`)
+      .pipe(map((stations) => stations[Math.floor(Math.random() * stations.length)]));
   }
 }

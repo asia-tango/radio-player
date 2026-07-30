@@ -4,11 +4,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { RADIO_BROWSER_API_BASE } from '../data/radio-browser.config';
 import { Station } from '../models/station.model';
+import { StationService } from './station.service';
 
 @Injectable({ providedIn: 'root' })
 export class PlayerService {
   private readonly http = inject(HttpClient);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly stationService = inject(StationService);
   private readonly audio = new Audio();
 
   readonly currentStation = signal<Station | null>(null);
@@ -61,6 +63,14 @@ export class PlayerService {
     } else {
       this.audio.pause();
     }
+  }
+
+  playRandomTop(): void {
+    this.stationService.fetchRandomTopStation().subscribe((station) => {
+      if (station) {
+        this.play(station);
+      }
+    });
   }
 
   stop(): void {

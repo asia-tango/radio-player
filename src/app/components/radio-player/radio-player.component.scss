@@ -33,8 +33,18 @@
 
 .radio-controls {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 16px;
+
+  .random-btn {
+    border-color: rgba(255, 255, 255, 0.7) !important;
+    color: #fff !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
 
   .play-pause-btn {
     background: linear-gradient(135deg, #ff6b6b, #feca57);

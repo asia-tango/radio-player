@@ -54,28 +54,3 @@ body {
 .cdk-overlay-container {
   z-index: 10000;
 }
-
-.cdk-global-overlay-wrapper {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.station-picker-backdrop {
-  background: rgba(20, 8, 6, 0.55) !important;
-  backdrop-filter: blur(6px) saturate(120%);
-}
-
-.station-picker-dialog .mat-mdc-dialog-container {
-  padding: 0 !important;
-  border-radius: 16px !important;
-  overflow: hidden;
-  background: #fff !important;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28) !important;
-}
-
-.station-picker-dialog .mat-mdc-dialog-surface {
-  padding: 20px 22px 18px !important;
-  border-radius: 16px !important;
-  background: #fff !important;
-}
