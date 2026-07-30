@@ -5,6 +5,10 @@ A live internet radio player built with Angular 21 (standalone components, signa
 
 **Live demo:** https://redwave-fm.web.app
 
+Screenshot
+<img width="2742" height="1221" alt="image" src="https://github.com/user-attachments/assets/e69db85a-c1f5-4f83-9573-2314d16ea532" />
+
+
 Streams real stations from the [Radio Browser API](https://api.radio-browser.info) — browse by
 country, filter by genre, search by name, save favorites, or just hit Random for an instant pick
 from the current top 100 by popularity.
