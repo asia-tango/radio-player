@@ -12,7 +12,10 @@ export interface RetryConfig {
 const DEFAULT_CONFIG: RetryConfig = {
   maxRetries: 2, // plus the initial attempt, that's 3 attempts total
   baseDelayMs: 500,
-  requestTimeoutMs: 8000, // a request that never responds counts as a failure too
+  // A request that never responds counts as a failure too. Kept short: with 3
+  // attempts and backoff, a dead backend would otherwise take ~25s (3x8s) to
+  // surface the "Try again" button instead of ~11s (3x3s).
+  requestTimeoutMs: 3000,
 };
 
 // Delay grows exponentially (500ms -> 1000ms) instead of linearly, giving the
