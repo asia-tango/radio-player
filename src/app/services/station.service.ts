@@ -61,8 +61,15 @@ export class StationService {
     defaultValue: { stations: [], fellBackFromCountry: false } as SearchResult,
   });
 
-  readonly stations = computed(() => this.searchResource.value().stations);
-  readonly fellBackFromCountry = computed(() => this.searchResource.value().fellBackFromCountry);
+  // Reading `.value()` while the resource is in an error state throws
+  // (ResourceValueError) - guard with `.hasValue()` so a failed search doesn't
+  // crash change detection for anything reading these outside the error branch.
+  readonly stations = computed(() =>
+    this.searchResource.hasValue() ? this.searchResource.value().stations : [],
+  );
+  readonly fellBackFromCountry = computed(() =>
+    this.searchResource.hasValue() ? this.searchResource.value().fellBackFromCountry : false,
+  );
   readonly isLoading = this.searchResource.isLoading;
   readonly error = this.searchResource.error;
   readonly hasSearched = computed(() => this.searchParams() !== undefined);

@@ -1,7 +1,7 @@
 # RedWave FM
 
-A live internet radio player built with Angular 21 (standalone components, signals, zoneless-free
-`OnPush` everywhere, no NgModules) as a portfolio piece for a Senior/Lead Angular job search.
+A live internet radio player built with Angular 21 (standalone components, signals OnPush everywhere, no NgModules) as a portfolio piece 
+for a Senior/Lead Angular job search.
 
 **Live demo:** https://redwave-fm.web.app
 
