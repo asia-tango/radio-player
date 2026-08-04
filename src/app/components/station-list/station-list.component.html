@@ -1,5 +1,10 @@
 @if (isLoading()) {
   <p class="status-message">Loading stations…</p>
+} @else if (hasError()) {
+  <div class="status-message status-message--error">
+    <p>Server error — please retry.</p>
+    <button mat-stroked-button type="button" (click)="retry()">Try again</button>
+  </div>
 } @else if (displayedStations().length === 0) {
   <p class="status-message">{{ emptyMessage() }}</p>
 } @else {

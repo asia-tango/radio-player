@@ -25,4 +25,11 @@ export class StationListComponent {
 
   protected readonly displayedStations = computed(() => this.stations() ?? this.stationService.stations());
   protected readonly isLoading = computed(() => this.stations() === null && this.stationService.isLoading());
+  protected readonly hasError = computed(
+    () => this.stations() === null && this.stationService.error() !== undefined,
+  );
+
+  protected retry(): void {
+    this.stationService.retry();
+  }
 }
