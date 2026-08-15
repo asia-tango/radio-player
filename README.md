@@ -1,6 +1,7 @@
 # RedWave FM
 
 A live internet radio player built with Angular 21 (standalone components, signals, OnPush everywhere, no NgModules) - a second attempt after a stalled Angular 15 version a year ago.
+
 Radio instead of another playlist app: no algorithm deciding what you'll hear next based on your history - just a live stream, genre after genre, the way radio always worked.
 
 **Live demo:** https://redwave-fm.web.app
