@@ -1,7 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { httpResource } from '@angular/common/http';
-import { Injectable, computed, effect, inject, resource, signal } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Injectable, computed, inject, resource, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { excludeBannedStations } from '../data/content-policy';
@@ -29,7 +28,6 @@ const TOP_STATIONS_URL = `${RADIO_BROWSER_API_BASE}/json/stations/search?${new H
 @Injectable({ providedIn: 'root' })
 export class StationService {
   private readonly http = inject(HttpClient);
-  private readonly snackBar = inject(MatSnackBar);
 
   readonly searchQuery = signal('');
   readonly selectedTag = signal<string | null>(null);
@@ -63,8 +61,15 @@ export class StationService {
     defaultValue: { stations: [], fellBackFromCountry: false } as SearchResult,
   });
 
-  readonly stations = computed(() => this.searchResource.value().stations);
-  readonly fellBackFromCountry = computed(() => this.searchResource.value().fellBackFromCountry);
+  // Reading `.value()` while the resource is in an error state throws
+  // (ResourceValueError) - guard with `.hasValue()` so a failed search doesn't
+  // crash change detection for anything reading these outside the error branch.
+  readonly stations = computed(() =>
+    this.searchResource.hasValue() ? this.searchResource.value().stations : [],
+  );
+  readonly fellBackFromCountry = computed(() =>
+    this.searchResource.hasValue() ? this.searchResource.value().fellBackFromCountry : false,
+  );
   readonly isLoading = this.searchResource.isLoading;
   readonly error = this.searchResource.error;
   readonly hasSearched = computed(() => this.searchParams() !== undefined);
@@ -78,18 +83,6 @@ export class StationService {
   });
 
   readonly topStations = this.topStationsResource.value;
-
-  constructor() {
-    effect(() => {
-      if (this.searchResource.error()) {
-        this.snackBar.open(
-          "Sorry — the station directory isn't responding. Try Random instead.",
-          undefined,
-          { duration: 4000 },
-        );
-      }
-    });
-  }
 
   setSearchQuery(query: string): void {
     this.searchQuery.set(query);
@@ -107,6 +100,12 @@ export class StationService {
     this.searchQuery.set('');
     this.selectedTag.set(null);
     this.selectedCountryCode.set(null);
+  }
+
+  // Re-runs the last search after all automatic retries (see retry.interceptor.ts)
+  // have already been exhausted and the resource is sitting in an error state.
+  retry(): void {
+    this.searchResource.reload();
   }
 
   pickRandomTopStation(): Station | undefined {
